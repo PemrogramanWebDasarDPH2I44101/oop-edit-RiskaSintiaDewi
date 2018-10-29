@@ -4,38 +4,53 @@ class Kalkulator{
 
     public function Kalkulator(){
         $servername = "localhost";
-        $username   = "admin";
-        $password   = "1234";
-        $db         = "WebDasar";       
+        $username   = "root";
+        $password   = "";
+        $db         = "webdasar";       
         $this->conn = mysqli_connect($servername, $username, 
                            $password, $db);                        
     }    
 
     public function tambah(){
-        $angka1 = $_POST['input1'];
-        $angka2 = $_POST['input2'];
-        $sql    = "INSERT INTO siswa(nama, nim) 
-                    VALUES ('$angka1','$angka2')";
-        mysqli_query($this->conn, $sql);        
-    }    
+        $nama = $_POST['nama'];
+        $nim = $_POST['nim'];
+        $tanggal = $_POST['tanggal'];
+        $sql    = "INSERT INTO siswa(nama, nim, tanggal) 
+                    VALUES ('$nama','$nim','$tanggal')";
+        mysqli_query($this->conn, $sql);   
+
+    }   
+
     public function kurang(){        
-        $angka1 = $_POST['input1'];
-        $angka2 = $_POST['input2'];
-        $sql    = "DELETE FROM siswa WHERE nim=$angka2";        
+        $nama = $_POST['nama'];
+        $nim = $_POST['nim'];
+        $tanggal = $_POST['tanggal'];
+        $sql    = "DELETE FROM siswa WHERE nim=$nim";        
         mysqli_query($this->conn, $sql);
+
     }
+
     public function bagi(){
         $sql    = "SELECT * FROM siswa";        
         return mysqli_query($this->conn, $sql);
+    }
+    public function view_data($nim){
+            $sql = "SELECT * FROM siswa where nim = '$nim'";
+            return mysqli_query($this->conn,$sql);
 
     }
+
 }
 $operasi = $_POST["operasi"];
 $kalkulator = new Kalkulator();
-if($operasi == "+")
+if($operasi == "+"){
     $kalkulator->tambah();
-if($operasi == "-")
+    echo "Data Telah Ditambahkan";
+}
+if($operasi == "-"){
     $kalkulator->kurang();
+    echo "Data Telah Terhapus";
+}
 if($operasi == "/"){
     $result = $kalkulator->bagi();
     require_once("data.php");
